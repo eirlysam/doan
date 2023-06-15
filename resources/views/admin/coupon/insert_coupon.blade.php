@@ -73,7 +73,7 @@
                 </div>
                 
                 <br>
-                <button class="btn btn-danger waves-effect" type="submit" name="add_coupon">Thêm ã giảm giá</button>
+                <button class="btn btn-danger waves-effect" type="submit" name="add_coupon">Thêm mã giảm giá</button>
             </form>
         </div>
     </div>

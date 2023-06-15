@@ -61,19 +61,45 @@ class CategoryProduct extends Controller
     	return view('admin_layout')->with('admin.all_category_product', $manager_category_product);
     }
 
+    // public function save_category_product(Request $request){
+    //     $this->AuthLogin();
+    // 	$data = array();
+    // 	$data['category_name'] = $request->category_product_name;
+    //     $data['category_parent'] = $request->category_parent;
+    //     $data['meta_keywords'] = $request->category_product_keywords;
+    //     $data['slug_category_product'] = $request->slug_category_product;
+    // 	$data['category_desc'] = $request->category_product_desc;
+    // 	$data['category_status'] = $request->category_product_status;
+
+    // 	DB::table('tbl_category_product')->insert($data);
+    // 	Session::put('message', 'Thêm danh mục sản phẩm thành công!');
+    // 	return Redirect::to('all-category-product');
+    // }
+
     public function save_category_product(Request $request){
         $this->AuthLogin();
-    	$data = array();
-    	$data['category_name'] = $request->category_product_name;
-        $data['category_parent'] = $request->category_parent;
-        $data['meta_keywords'] = $request->category_product_keywords;
-        $data['slug_category_product'] = $request->slug_category_product;
-    	$data['category_desc'] = $request->category_product_desc;
-    	$data['category_status'] = $request->category_product_status;
+        
+        $categoryName = $request->category_product_name;
+    
+        // Kiểm tra xem danh mục đã tồn tại hay chưa
+        $existingCategory = CategoryProductModel::where('category_name', $categoryName)->first();
+        
+        if ($existingCategory) {
+            // Danh mục đã tồn tại, xử lý thông báo lỗi hoặc thực hiện các xử lý khác
+            Session::put('message', 'Danh mục đã tồn tại!');
+        } else {
+            $data = array();
+            $data['category_name'] = $request->category_product_name;
+            $data['category_parent'] = $request->category_parent;
+            $data['meta_keywords'] = $request->category_product_keywords;
+            $data['slug_category_product'] = $request->slug_category_product;
+            $data['category_desc'] = $request->category_product_desc;
+            $data['category_status'] = $request->category_product_status;
 
-    	DB::table('tbl_category_product')->insert($data);
-    	Session::put('message', 'Thêm danh mục sản phẩm thành công!');
-    	return Redirect::to('all-category-product');
+            DB::table('tbl_category_product')->insert($data);
+            Session::put('message', 'Thêm danh mục sản phẩm thành công!');
+            }
+        return Redirect::to('all-category-product');
     }
 
     public function unactive_category_product($category_product_id){

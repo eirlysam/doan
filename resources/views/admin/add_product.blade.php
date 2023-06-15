@@ -75,14 +75,14 @@
                 <label class="form-label">Giá bán</label>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" data-validation="length" data-validation-length="min3" data-validation-error-msg="Điền vào số tiền" name="product_price" class="form-control price_format">
+                        <input type="text" data-validation="length" data-validation-length="min3" data-validation-error-msg="Điền vào số tiền" name="product_price" class="form-control">
                     </div>
                 </div>
 
                 <label class="form-label">Giá gốc</label>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" data-validation="length" data-validation-length="min3" data-validation-error-msg="Điền vào số tiền" name="price_cost" class="form-control price_format">
+                        <input type="text" data-validation="length" data-validation-length="min3" data-validation-error-msg="Điền vào số tiền" name="price_cost" class="form-control">
                     </div>
                 </div>
 
@@ -103,8 +103,8 @@
                 <label class="form-label">Hiển thị</label>
                 <div class="form-group">
                     <select name="product_status" class="form-control">
-                        <option value="0">Ẩn</option>
-                        <option value="1">Hiện</option>
+                        <option value="0">Hiển thị</option>
+                        <option value="1">Ẩn</option>
                     </select>
                 </div>
                 <br>

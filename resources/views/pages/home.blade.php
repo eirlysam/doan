@@ -152,8 +152,8 @@
                                     <h2><span id="product_quickview_title"></span></h2>
                                     <span>
                                         <h2 style="color: #FE980F">Giá tiền: <span id="product_quickview_price"></span></h2><br>
-                                        <label>Số lượng:</label>
-                                        <input name="qty" type="number" min="1" class="cart_product_qty_" value="1" />
+                                        <!-- <label>Số lượng:</label> -->
+                                        <input hidden name="qty" type="number" min="1" class="cart_product_qty_" value="1" />
                                         <input name="productid_hidden" type="hidden" value="" />
                                     </span>
                                     <p>Mô tả sản phẩm</p>

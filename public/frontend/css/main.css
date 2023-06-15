@@ -1188,7 +1188,7 @@ h2.title {
 
 .pagination {
   display: inline-block;
-  margin-bottom: 25px;
+  margin-bottom: 0;
   margin-top: 0;
   padding-left: 15px;
 }
@@ -1832,6 +1832,7 @@ h2.title {
   /*padding: 5px;*/
 }
 
+
 .user_option label {
   color: #696763;
   font-weight: normal;
@@ -1890,14 +1891,33 @@ h2.title {
   margin-left: 40px;
 }
 
-.update, .check_out, .delete, .check_coupon {
+.update, .check_out, .check_coupon {
   background: #FE980F;
   border-radius: 0;
   color: #FFFFFF;
-  margin-top: 18px;
+  margin-top: 10px;
   border: none;
   padding: 5px 15px;
-  margin-left: 20px;
+  margin-left: 10px;
+  margin-bottom: 15px;
+}
+.delete {
+  background: #FE980F;
+  border-radius: 0;
+  color: #FFFFFF;
+  margin-top: 10px;
+  border: none;
+  padding: 5px 15px;
+  margin-bottom: 15px;
+}
+
+.check_coupon_xoa {
+  background: #FE980F;
+  border-radius: 0;
+  color: #FFFFFF;
+  margin-top: 10px;
+  border: none;
+  padding: 5px 15px;
   margin-bottom: 15px;
 }
 .update{

@@ -114,24 +114,12 @@
                             <tr>
                                 <th>STT</th>
                                 <th>Tên sản phẩm</th>
-                                <th>Số lượng kho</th>
                                 <th>Mã giảm giá</th>
                                 <th>Số lượng</th>
                                 <th>Giá bán</th>
-                                <th>Giá gốc</th>
                                 <th>Tổng tiền</th>
                         </thead>
-                        <!-- <tfoot>
-                            <tr>
-                                <th>STT</th>
-                                <th>Tên sản phẩm</th>
-                                <th>Số lượng kho</th>
-                                <th>Mã giảm giá</th>
-                                <th>Số lượng</th>
-                                <th>Giá sản phẩm</th>
-                                <th>Tổng tiền</th>
-                            </tr>
-                        </tfoot> -->
+                        
                         <tbody>
                             @php 
                                 $i = 0;
@@ -146,7 +134,6 @@
                             <tr class="color_qty_{{$details->product_id}}">
                                 <td><i>{{$i}}</i></td>
                                 <td>{{$details->product_name}}</td>
-                                <td>{{$details->product->product_quantity}}</td>
                                 <td>
                                     @if($details->product_coupon!='no')
                                         {{$details->product_coupon}}
@@ -163,7 +150,7 @@
                                     
                                 </td>
                                 <td>{{number_format($details->product_price,0,',','.')}}đ</td>
-                                <td>{{number_format($details->product->price_cost,0,',','.')}}đ</td>
+                                
                                 <td>{{number_format($subtotal,0,',','.')}}đ</td>
                                 
                             </tr>

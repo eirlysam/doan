@@ -56,7 +56,7 @@ class AdminController extends Controller
             Session::put('customer_picture',$account_name->customer_picture);
             Session::put('customer_name',$account_name->customer_name);
         }
-        return redirect('/dang-nhap')->with('Đăng nhập tài khoản google <span style="color:red;">'.$account_name->customer_email.'</span> thành công');
+        return redirect('/checkout')->with('Đăng nhập tài khoản google <span style="color:red;">'.$account_name->customer_email.'</span> thành công');
     }
 
     public function findOrCreateCustomer($users, $provider){
@@ -86,7 +86,7 @@ class AdminController extends Controller
         }
     }
 
-    public function show_dashboard()
+    public function show_dashboard(Request $request)
     {
         $this->AuthLogin();
 
@@ -94,10 +94,39 @@ class AdminController extends Controller
         $app_product = Product::all()->count();
         $app_order = Order::all()->count();
         $app_customer = Customer::all()->count();
+        // $app_cancelled_order = Order::where('order_status', '3')->count();
 
-        $product_views = Product::orderBy('product_views','DESC')->take(20)->get();
+        $timeRange = $request->input('time_range');
 
-    	return view('admin.dashboard')->with(compact('app_product','app_order','app_customer','product_views'));
+        $cancelledOrders = 0;
+
+        if ($timeRange === '7 ngày qua') {
+            $cancelledOrders = Order::where('order_status', '3')
+                ->where('order_date', '>=', Carbon::now()->subDays(7))
+                ->count();
+        } elseif ($timeRange === 'Tháng này') {
+            $cancelledOrders = Order::where('order_status', '3')
+                ->whereYear('order_date', Carbon::now()->year)
+                ->whereMonth('order_date', Carbon::now()->month)
+                ->count();
+        } elseif ($timeRange === 'Tháng trước') {
+            $cancelledOrders = Order::where('order_status', '3')
+                ->whereYear('order_date', Carbon::now()->subMonth()->year)
+                ->whereMonth('order_date', Carbon::now()->subMonth()->month)
+                ->count();
+        } else {
+            $cancelledOrders = 0; // Default value if no valid time range is selected
+        }
+
+        $timeRangeOptions = [
+            '7 ngày qua' => '7 ngày qua',
+            'Tháng này' => 'Tháng này',
+            'Tháng trước' => 'Tháng trước',
+        ];
+        $product_views = Product::orderBy('product_views','DESC')->take(8)->get();
+        $product_sold = Product::orderBy('product_sold','DESC')->take(8)->get();
+
+    	return view('admin.dashboard')->with(compact('app_product','app_order','app_customer','product_views','cancelledOrders','timeRange','timeRangeOptions','product_sold'));
     }
 
     public function days_order(){

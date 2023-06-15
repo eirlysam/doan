@@ -73,14 +73,14 @@
                 <label class="form-label">Giá bán</label>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" name="product_price" class="form-control price_format" value="{{$pro->product_price}}">
+                        <input type="text" name="product_price" class="form-control" value="{{$pro->product_price}}">
                     </div>
                 </div>
 
                 <label class="form-label">Giá gốc</label>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" name="price_cost"  class="form-control price_format" value="{{$pro->price_cost}}">
+                        <input type="text" name="price_cost"  class="form-control" value="{{$pro->price_cost}}">
                     </div>
                 </div>
 

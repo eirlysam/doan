@@ -45,20 +45,7 @@
                             <th></th>
                             
                     </thead>
-                    <!-- <tfoot>
-                        <tr>
-                            <th>Tên mã giảm giá</th>
-                            <th>Ngày bắt đầu</th>
-                            <th>Ngày kết thúc</th>
-                            <th>Mã giảm giá</th>
-                            <th>Số lượng giảm giá</th>
-                            <th>Điều kiện giảm giá</th>
-                            <th>Số giảm</th>
-                            <th>Trạng thái</th>
-                            <th>Hết hạn</th>
-                            <th></th>
-                        </tr>
-                    </tfoot> -->
+                    
                     <tbody>
                         @foreach($coupon as $key => $cou)
                         <tr>
@@ -108,7 +95,7 @@
                                     ?>
                             </td>
                             <td>                               
-                                @if($cou->coupon_date_end>=$today)
+                                @if(strtotime($cou->coupon_date_end) >= strtotime($today))
                                     <span style="color: green">Còn hạn</span>
                                 @else
                                     <span style="color: red">Đã hết hạn</span>

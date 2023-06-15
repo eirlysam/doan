@@ -10,7 +10,7 @@
     <link rel="canonical" href="{{$url_canonical}}"/>
     <meta name="author" content="">
     <link rel="icon" type="image/x-icon" href=""/>
-
+    <meta name="csrf-token" content="{{csrf_token()}}">
 
 
     <title>{{$meta_title}}</title>
@@ -104,7 +104,7 @@
                                 </ul>
                             </div>
                             
-                            <div class="btn-group">
+                            <!-- <div class="btn-group">
                                 <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
                                     VNĐ
                                     <span class="caret"></span>
@@ -113,14 +113,14 @@
                                     <li><a href="#">USD</a></li>
                                     
                                 </ul>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="col-sm-8">
                         <div class="shop-menu pull-right">
                             <ul class="nav navbar-nav">
                                 
-                                <li><a href="#"><i class="fa fa-star"></i> Yêu thích</a></li>
+                                <!-- <li><a href="#"><i class="fa fa-star"></i> Yêu thích</a></li> -->
                                 <?php
                                    $customer_id = Session::get('customer_id');
                                    $shipping_id = Session::get('shipping_id');
@@ -344,11 +344,131 @@
 
     <script src="https://www.paypalobjects.com/api/checkout.js"></script>
 
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#imageGallery').lightSlider({
+                gallery:true,
+                item:1,
+                loop:true,
+                thumbItem:3,
+                slideMargin:0,
+                enableDrag: false,
+                currentPagerPosition:'left',
+                onSliderLoad: function(el) {
+                    el.lightGallery({
+                        selector: '#imageGallery .lslide'
+                    });
+                }   
+            });  
+        });
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            // Lưu tổng tiền ban đầu (trước khi áp dụng mã giảm giá)
+            var originalTotalPrice = calculateTotalPrice();
+
+            // Bắt sự kiện thay đổi giá trị trường nhập liệu
+            $('.cart_quantity_input').on('change', function() {
+                var session_id = $(this).attr('name').match(/\[(.*?)\]/)[1]; // Lấy session_id từ thuộc tính name
+                var qty = $(this).val(); // Lấy số lượng mới
+                var price = $(this).closest('tr').find('.cart_price p').text(); // Lấy giá tiền hiện tại
+                // Định dạng lại nội dung giá tiền để loại bỏ ký hiệu tiền tệ và dấu phân cách hàng nghìn
+                var productPrice = parseFloat(price.replace('đ', '').replace(/\./g, '')) || 0;
+                var totalPrice = productPrice * qty; // Tính toán giá tiền tổng mới
+                $(this).closest('tr').find('.cart_total_price').text(formatPrice(totalPrice)); // Cập nhật giá tiền tổng mới trong giao diện
+                updateCart(session_id, qty, productPrice, totalPrice); // Gửi yêu cầu cập nhật giỏ hàng
+
+                // Cập nhật tổng tiền sau khi thay đổi số lượng
+                  var totalAmountAfterDiscount = calculateTotalAmountAfterDiscount();
+                  $('#total_amount_after_discount').text(formatPrice(totalAmountAfterDiscount));
+                
+            });
+
+            // Hàm gửi yêu cầu cập nhật giỏ hàng bằng Ajax
+            function updateCart(session_id, qty, price, totalPrice) {
+                $.ajax({
+                    url: "{{url('/update-cart')}}", // Đường dẫn đến phương thức cập nhật giỏ hàng trong controller
+                    method: 'POST',
+                    data: {
+                        session_id: session_id,
+                        qty: qty,
+                        price: price,
+                        totalPrice: totalPrice
+                    },
+                    headers:{
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        // Xử lý phản hồi từ phương thức cập nhật giỏ hàng
+                        if (response.success) {
+                            // Cập nhật thành công, cập nhật giao diện hoặc hiển thị thông báo thành công
+                            alert(response.message);
+
+                            // Cập nhật tổng tiền trong giao diện
+                            var totalPrice = calculateTotalPrice();
+                            var totalAmountAfterDiscount = calculateTotalAmountAfterDiscount();
+                            $('#total_amount').text(formatPrice(totalPrice));
+                            $('#total_amount_after_discount').text(formatPrice(totalAmountAfterDiscount));;
+
+                        } else {
+                            // Cập nhật thất bại, hiển thị thông báo lỗi
+                            alert(response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Xử lý lỗi khi gửi yêu cầu
+                        console.log(error);
+                    }
+                });
+            }
+
+            // Hàm tính toán tổng tiền
+            function calculateTotalPrice() {
+              var totalPrice = 0;
+              $('.cart_total_price').each(function() {
+                var price = $(this).text();
+                var productPrice = parseFloat(price.replace('đ', '').replace(/\./g, '')) || 0;
+                totalPrice += productPrice;
+              });
+              return totalPrice;
+            }
+
+            // Hàm tính toán tổng tiền sau khi áp dụng mã giảm giá
+            function calculateTotalAmountAfterDiscount() {
+                var totalAmount = calculateTotalPrice();
+                var couponAmount = 0;
+
+                @if(Session::get('coupon'))
+                    @foreach(Session::get('coupon') as $key => $cou)
+                        @if($cou['coupon_condition'] == 1)
+                            couponAmount = (totalAmount * {{$cou['coupon_number']}}) / 100;
+                        @else
+                            couponAmount = {{$cou['coupon_number']}};
+                        @endif
+                    @endforeach
+                @endif
+
+                var totalAmountAfterDiscount = totalAmount - couponAmount;
+                return totalAmountAfterDiscount;
+            }
+
+            // Hàm định dạng giá tiền
+              function formatPrice(price) {
+                  if (typeof price === 'number') {
+                    return price.toLocaleString('vi-VN') + 'đ';
+                  }
+                  return '';
+                }
+        });
+    </script>
 
     <script type="text/javascript">
         function Huydonhang(id){
-            var order_code = id;
-            var lydo = $('.lydohuydon').val();
+            var order_code = id.split("_")[1];
+            var lydo = $('#lydohuydon_'  + order_code).val();
             var _token = $('input[name="_token"]').val();
 
             $.ajax({
@@ -709,7 +829,7 @@
         });
     </script>
 
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         $(document).ready(function() {
             $('#imageGallery').lightSlider({
                 gallery:true,
@@ -726,7 +846,7 @@
                 }   
             });  
         });
-    </script>
+    </script> -->
 
     <script type="text/javascript">
         $(document).ready(function(){
@@ -802,7 +922,7 @@
                 var _token = $('input[name="_token"]').val();
 
                 if(parseInt(cart_product_qty)>parseInt(cart_product_quantity)){
-                    alert('Vuot qua so luong' + cart_product_quantity);
+                    alert('Vượt quá số lượng tồn kho ' + cart_product_quantity);
                 }else{
                 
                     $.ajax({

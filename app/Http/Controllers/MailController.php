@@ -35,8 +35,17 @@ class MailController extends Controller
         $coupon = Coupon::where('coupon_code',$coupon_code)->first();
         $start_coupon = $coupon->coupon_date_start;
         $end_coupon = $coupon->coupon_date_end;
+
         $now = Carbon::now('Asia/Ho_Chi_Minh')->format('d-m-Y H:i:s');
         $title_mail = "Mã khuyến mãi ngày".' '.$now;
+
+        // Kiểm tra xem mã giảm giá đã hết hạn chưa
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d');
+        $end_coupon = Carbon::createFromFormat('d-m-Y', $coupon->coupon_date_end)->format('Y-m-d');
+
+        if ($today > $end_coupon) {
+            return redirect()->back()->with('message', 'Mã giảm giá đã hết hạn!');
+        }
 
         $data = [];
         foreach ($customer as $normal) {
@@ -67,6 +76,14 @@ class MailController extends Controller
         $end_coupon = $coupon->coupon_date_end;
     	$now = Carbon::now('Asia/Ho_Chi_Minh')->format('d-m-Y H:i:s');
     	$title_mail = "Mã khuyến mãi ngày".' '.$now;
+
+        // Kiểm tra xem mã giảm giá đã hết hạn chưa
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d');
+        $end_coupon = Carbon::createFromFormat('d-m-Y', $coupon->coupon_date_end)->format('Y-m-d');
+
+        if ($today > $end_coupon) {
+            return redirect()->back()->with('message', 'Mã giảm giá đã hết hạn!');
+        }
 
     	$data = [];
     	foreach ($customer_vip as $vip) {

@@ -152,44 +152,56 @@ class ProductController extends Controller
 
     public function save_product(Request $request){
         $this->AuthLogin();
-    	$data = array();
 
-        $product_price = filter_var($request->product_price, FILTER_SANITIZE_NUMBER_INT);
-        $price_cost = filter_var($request->price_cost, FILTER_SANITIZE_NUMBER_INT);
-
-    	$data['product_name'] = $request->product_name;
-        $data['product_quantity'] = $request->product_quantity;
-        $data['product_slug'] = $request->product_slug;
-        $data['product_price'] = $product_price;
-        $data['price_cost'] = $price_cost;
-    	$data['product_desc'] = $request->product_desc;
-        $data['product_content'] = $request->product_content;
-        $data['category_id'] = $request->product_cate;
-    	$data['product_status'] = $request->product_status;
-        $data['product_image'] = $request->product_image;
-        $get_image = $request->file('product_image');
-
-        $path = 'public/uploads/product/';
-        $path_gallery = 'public/uploads/gallery/';
- 
-        if($get_image){
-            $get_name_image = $get_image->getClientOriginalName();
-            $name_image = current(explode('.',$get_name_image));
-            $new_image = $name_image.rand(0,99).'.'.$get_image->getClientOriginalExtension();
-            $get_image->move($path,$new_image);
-            File::copy($path.$new_image,$path_gallery.$new_image);
-            $data['product_image'] = $new_image;
-            
-        }
-        $pro_id = DB::table('tbl_product')->insertGetId($data);
-        $gallery = new Gallery();
-        $gallery->gallery_image = $new_image;
-        $gallery->gallery_name = $new_image;
-        $gallery->product_id = $pro_id;
-
-        $gallery->save();
+        $productName = $request->product_name;
+    
+        // Kiểm tra xem danh mục đã tồn tại hay chưa
+        $existingProduct = Product::where('product_name', $productName)->first();
         
-        Session::put('message', 'Thêm sản phẩm thành công!');
+        if ($existingProduct) {
+            // Danh mục đã tồn tại, xử lý thông báo lỗi hoặc thực hiện các xử lý khác
+            Session::put('message', 'Sản phẩm đã tồn tại!');
+        } else {
+
+        	$data = array();
+
+            $product_price = filter_var($request->product_price, FILTER_SANITIZE_NUMBER_INT);
+            $price_cost = filter_var($request->price_cost, FILTER_SANITIZE_NUMBER_INT);
+
+        	$data['product_name'] = $request->product_name;
+            $data['product_quantity'] = $request->product_quantity;
+            $data['product_slug'] = $request->product_slug;
+            $data['product_price'] = $product_price;
+            $data['price_cost'] = $price_cost;
+        	$data['product_desc'] = $request->product_desc;
+            $data['product_content'] = $request->product_content;
+            $data['category_id'] = $request->product_cate;
+        	$data['product_status'] = $request->product_status;
+            $data['product_image'] = $request->product_image;
+            $get_image = $request->file('product_image');
+
+            $path = 'public/uploads/product/';
+            $path_gallery = 'public/uploads/gallery/';
+     
+            if($get_image){
+                $get_name_image = $get_image->getClientOriginalName();
+                $name_image = current(explode('.',$get_name_image));
+                $new_image = $name_image.rand(0,99).'.'.$get_image->getClientOriginalExtension();
+                $get_image->move($path,$new_image);
+                File::copy($path.$new_image,$path_gallery.$new_image);
+                $data['product_image'] = $new_image;
+                
+            }
+            $pro_id = DB::table('tbl_product')->insertGetId($data);
+            $gallery = new Gallery();
+            $gallery->gallery_image = $new_image;
+            $gallery->gallery_name = $new_image;
+            $gallery->product_id = $pro_id;
+
+            $gallery->save();
+            
+            Session::put('message', 'Thêm sản phẩm thành công!');
+        }
         return Redirect::to('add-product');
     }
 

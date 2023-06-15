@@ -48,11 +48,11 @@
 <body>
 	<div class="coupon">
 		<div class="container">
-			<h3>Mã khuyến mãi từ shop <a target="_blank" href="">https://Ashion.com</a></h3>
+			<h3>Mã khuyến mãi từ shop <a target="_blank" href="">https://MaTuStore.com</a></h3>
 		</div>
 		<div class="container" style="background-color: white">
 			<h2 class="note"><b><i>Giảm 20% cho tổng đơn hàng trên 500k</i></b></h2>
-			<p>Quý khách đã từng mua hàng tại Ashion<a target="_blank" style="color: red" href="">Ashion.com</a> nếu đã có tài khoản xin vui lòng <a target="_blank" style="color: red" href="">đăng nhập</a>vào tài khoản để mua hàng và nhập mã code phía dưới để được giảm giá mua hàng, xin cảm ơn quý khách!</p>
+			<p>Quý khách đã từng mua hàng tại Ashion<a target="_blank" style="color: red" href="">MaTuStore.com</a> nếu đã có tài khoản xin vui lòng <a target="_blank" style="color: red" href="">đăng nhập</a>vào tài khoản để mua hàng và nhập mã code phía dưới để được giảm giá mua hàng, xin cảm ơn quý khách!</p>
 		</div>
 		<div class="container">
 			<p class="code">Sử dụng mã giảm giá sau: <span class="promo">BOH232</span></p>

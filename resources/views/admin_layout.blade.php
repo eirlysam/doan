@@ -763,9 +763,9 @@
         });
     </script>
 
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         $('.price_format').simpleMoneyFormat();
-    </script>
+    </script> -->
 
     <script type="text/javascript">
         $(document).ready(function(){
@@ -847,7 +847,9 @@
                 
                 '#CE8F61',
                 
-                '#4842F5'
+                '#4842F5',
+
+                // '#FDCEDF'
               ],
               //labelColor:"#cccccc", // text color
               //backgroundColor: '#333333', // border color
@@ -857,6 +859,8 @@
                 {label:"Don hang", value:<?php echo $app_order ?>},
     
                 {label:"Khach hang", value:<?php echo $app_customer ?>}
+
+                
               ]
             });
         });

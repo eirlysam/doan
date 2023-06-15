@@ -144,17 +144,7 @@
                             <th>Giá gốc</th>
                             <th>Tổng tiền</th>
                     </thead>
-                    <!-- <tfoot>
-                        <tr>
-                            <th>STT</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Số lượng kho</th>
-                            <th>Mã giảm giá</th>
-                            <th>Số lượng</th>
-                            <th>Giá sản phẩm</th>
-                            <th>Tổng tiền</th>
-                        </tr>
-                    </tfoot> -->
+                    
                     <tbody>
                         @php 
                             $i = 0;
@@ -183,9 +173,9 @@
                                 <input type="hidden" name="order_code" class="order_code" value="{{$details->order_code}}">
                                 <input type="hidden" name="order_product_id" class="order_product_id" value="{{$details->product_id}}">
 
-                                @if($order_status!=2)
+                                <!-- @if($order_status!=2)
                                 <button class="btn btn-default update_quantity_order" data-product_id="{{$details->product_id}}" name="update_quantity_order">Cập nhật</button>
-                                @endif
+                                @endif -->
                             </td>
                             <td>{{number_format($details->product_price,0,',','.')}}đ</td>
                             <td>{{number_format($details->product->price_cost,0,',','.')}}đ</td>

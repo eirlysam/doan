@@ -172,8 +172,12 @@ class CheckoutController extends Controller
         //seo
         
     	$cate_product = DB::table('tbl_category_product')->where('category_status','0')->orderby('category_id','desc')->get();
+
+        // echo Session::get('customer_id');
+        $kh = Customer::find(Session::get('customer_id'));
+        // echo $kh;
     	
-    	return view('pages.checkout.show_checkout')->with('category',$cate_product)->with('meta_desc',$meta_desc)->with('meta_keywords',$meta_keywords)->with('meta_title',$meta_title)->with('url_canonical',$url_canonical);
+    	return view('pages.checkout.show_checkout',['kh'=>$kh])->with('category',$cate_product)->with('meta_desc',$meta_desc)->with('meta_keywords',$meta_keywords)->with('meta_title',$meta_title)->with('url_canonical',$url_canonical);
     }
 
     public function save_checkout_customer(Request $request){
@@ -268,6 +272,7 @@ class CheckoutController extends Controller
         if($result){
        
             Session::put('customer_id',$result->customer_id);
+            Session::put('customer', true); // trạng thái đăng nhập
             Session::save();
             
             return Redirect::to('/checkout');

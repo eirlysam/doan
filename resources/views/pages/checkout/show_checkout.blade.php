@@ -93,23 +93,21 @@
 									@endforeach	
 									<tr>
 										@if(!Session::get('success_paypal')==true)
-										<td>
-											<input type="submit" value="Cập nhật" name="update_qty" class="update btn-default btn-sm">
-										</td>
+										
 										<td><a class="btn btn-default delete" href="{{url('/del-all-product')}}">Xóa tất cả</a></td>
-										<td colspan="2">
+										<td colspan="3">
 											<!-- <form action="{{url('/check_coupon')}}" method="post">
 												<input type="text" class="form-control" name="coupon" placeholder="Nhập mã giảm giá...">
 												<input type="submit" class="btn btn-default check_coupon" name="check_coupon" value="Áp dụng">
 											</form> -->
-											<a class="btn btn-default check_out" href="{{route('processTransaction')}}">Thanh toán bằng PayPal</a>
+											<a class="btn btn-default delete" href="{{route('processTransaction')}}">Thanh toán bằng PayPal</a>
 										</td>
 										@endif
 										<td colspan="2">
 											<div class="total_area">
 											
 											<ul>
-												<li>Tổng <span>{{number_format($total,0,',','.')}}đ</span></li>
+												<li>Tổng <span id="total_amount">{{number_format($total,0,',','.')}}đ</span></li>
 												@if(Session::get('coupon'))
 												<li> 
 													@foreach(Session::get('coupon') as $key => $cou)
@@ -121,15 +119,15 @@
 																echo '<p><li>Tổng giảm <span>'.number_format($total_coupon,0,',','.').'đ</span></li></p>';
 																@endphp
 															</p>
-															<p><li>Thành tiền <span> {{number_format($total-$total_coupon,0,',','.')}}đ</span></li></p>
+															<p><li>Thành tiền <span id="total_amount_after_discount"> {{number_format($total-$total_coupon,0,',','.')}}đ</span></li></p>
 														@else
-															Mã giảm <span>{{number_format($cou['coupon_number'],0,',','.')}} đ</span>
+															Mã giảm <span>{{number_format($cou['coupon_number'],0,',','.')}}đ</span>
 															<p>
 																@php
 																$total_coupon = $total - $cou['coupon_number'];
 																@endphp
 															</p>
-															<p><li>Thành tiền <span>{{number_format($total_coupon,0,',','.')}}đ</span></li></p>
+															<p><li>Thành tiền <span id="total_amount_after_discount">{{number_format($total_coupon,0,',','.')}}đ</span></li></p>
 														@endif
 													@endforeach
 												</li>
@@ -198,7 +196,7 @@
 											<input type="text" class="form-control" name="coupon" placeholder="Nhập mã giảm giá...">
 											<input type="submit" class="btn btn-default check_coupon" name="check_coupon" value="Áp dụng">
 											@if(Session::get('coupon'))
-				                          		<a class="btn btn-default check_out" href="{{url('/unset-coupon')}}">Xóa mã khuyến mãi</a>
+				                          		<a class="btn btn-default check_coupon_xoa" href="{{url('/unset-coupon')}}">Xóa mã khuyến mãi</a>
 											@endif
 										</form>
 										
@@ -222,10 +220,10 @@
 						<p>Thông tin thanh toán</p>
 						<form method="post">
 							@csrf
-							<input type="text" name="shipping_email" class="shipping_email" placeholder="Email">
-							<input type="text" name="shipping_name" class="shipping_name" placeholder="Họ và tên">
+							<input type="text" name="shipping_email" value="{{$kh->customer_email}}" class="shipping_email" placeholder="Email">
+							<input type="text" name="shipping_name" value="{{$kh->customer_name}}" class="shipping_name" placeholder="Họ và tên">
 							<input type="text" name="shipping_address" class="shipping_address" placeholder="Địa chỉ">
-							<input type="text" name="shipping_phone" class="shipping_phone" placeholder="Số điện thoại">
+							<input type="text" name="shipping_phone" value="{{$kh->customer_phone}}" class="shipping_phone" placeholder="Số điện thoại">
 							<textarea name="shipping_notes" class="shipping_notes" placeholder="Ghi chú" rows="3"></textarea>
 							@if(Session::get('coupon'))
 								@foreach(Session::get('coupon') as $key => $cou)

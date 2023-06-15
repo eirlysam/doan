@@ -26,15 +26,7 @@
                                 <th>Tình trạng</th>
                                 <th></th>
                         </thead>
-                        <!-- <tfoot>
-                            <tr>
-                                <th>STT</th>
-                                <th>Mã đơn hàng</th>
-                                <th>Ngày đặt hàng</th>
-                                <th>Tình trạng</th>
-                                <th></th>
-                            </tr>
-                        </tfoot> -->
+                        
                         <tbody>
                             @php
                                 $i = 0;
@@ -58,12 +50,12 @@
                                 </td>
                                 <td align="center">
                                     
-                                    @if($ord->order_status!=3)
+                                    @if($ord->order_status!=3 && $ord->order_status != 2)
                                     <!-- Trigger the modal with a button -->
-                                    <p><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#huydon">Hủy đơn hàng</button></p>
+                                    <p><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#huydon_{{$ord->order_code}}">Hủy đơn hàng</button></p>
                                     @endif
                                     <!-- Modal -->
-                                    <div id="huydon" class="modal fade" role="dialog">
+                                    <div id="huydon_{{$ord->order_code}}" class="modal fade" role="dialog">
                                       <div class="modal-dialog">
                                         <form>
                                             @csrf
@@ -74,11 +66,11 @@
                                                 <h4 class="modal-title">Lý do hủy đơn hàng</h4>
                                               </div>
                                               <div class="modal-body">
-                                                <p><textarea rows="3" class="lydohuydon" required placeholder="(*) Lý do bạn hủy đơn...."></textarea></p>
+                                                <p><textarea id="lydohuydon_{{$ord->order_code}}" rows="3" class="lydohuydon" required placeholder="(*) Lý do bạn hủy đơn...."></textarea></p>
                                               </div>
                                               <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                                                <button type="button" id="{{$ord->order_code}}" onclick="Huydonhang(this.id)" class="btn btn-danger">Gửi</button>
+                                                <button type="button" id="huydon_{{$ord->order_code}}" onclick="Huydonhang(this.id)" class="btn btn-danger">Gửi</button>
                                               </div>
                                             </div>
                                         </form>
